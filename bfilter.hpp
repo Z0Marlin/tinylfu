@@ -1,8 +1,7 @@
 #ifndef BFILTER_HPP_
 #define BFILTER_HPP_
 #include<bits/stdc++.h>
-namespace BloomFilter
-{
+namespace BloomFilter {
     typedef uint32_t tablekey_t;
     typedef uint64_t hashkey_t;
     typedef std::vector<hashkey_t> hashkeys_t;
@@ -11,8 +10,6 @@ namespace BloomFilter
     private:
         const uint32_t hash_count;
         const uint32_t table_size;
-        // std::vector<bfreq_t> count_table;
-        // hashkeys_t hkeys;
         static const uint32_t BloomFilterSizeRatio = 25;
         static const size_t BloomFilterMinSize = 25000;
         static const size_t BloomFilterMaxSize = 3*1024*1024;
@@ -87,7 +84,7 @@ void BloomFilter::BloomFilter::Add(tablekey_t k){
 BloomFilter::bfreq_t BloomFilter::BloomFilter::Estimate(tablekey_t k){
     bfreq_t min_count, c;
     uint32_t i;
-    min_count = count_table[HashMix(hkeys[0], k)];
+    min_count = count_table[HashMix(hkeys[0], k)%table_size];
     for(i = 1; i < hash_count; i++){
         c = count_table[HashMix(hkeys[i], k)%table_size];
         if(c < min_count)

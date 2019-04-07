@@ -6,6 +6,12 @@ int main(){
     std::cout << bf.tsize() << std::endl;
     std::cout << bf.hcount() << std::endl;
     bf.show_table();
-    bf.Add(20);
+    for(int i = 12; i < 27; i++) bf.Add(i);
+    for(int i = 12; i < 27; i++) bf.Add(i);
+    for(int i = 12; i < 27; i++) bf.Add(i);
+
+    for(int i = 12; i < 27; i++) printf("ret %u\n\n", bf.Estimate(i));
+    printf("ret %u\n\n", bf.Estimate(1291));
+    printf("ret %u\n\n", bf.Estimate(99));
     bf.show_table();
 }
