@@ -3,7 +3,7 @@
 #include<bits/stdc++.h>
 namespace BloomFilter
 {
-    typedef uint32_t tabledata_t;
+    typedef uint32_t tablekey_t;
     typedef uint64_t hashkey_t;
     typedef std::vector<hashkey_t> hashkeys_t;
     typedef uint8_t bfreq_t;
@@ -14,16 +14,16 @@ namespace BloomFilter
         // std::vector<bfreq_t> count_table;
         // hashkeys_t hkeys;
         static const uint32_t BloomFilterSizeRatio = 25;
-        static const uint32_t BloomFilterMinSize = 25000;
-        static const uint32_t BloomFilterMaxSize = 3*1024*1024;
-        static uint32_t CalFilterSize(unsigned int);
-        static uint32_t CalHashCount(unsigned int);
-    public:
+        static const size_t BloomFilterMinSize = 25000;
+        static const size_t BloomFilterMaxSize = 3*1024*1024;
         std::vector<bfreq_t> count_table;
         hashkeys_t hkeys;
-        BloomFilter(int key_count);
-        void Add(tabledata_t);
-        bfreq_t Estimate(tabledata_t);
+        static size_t CalFilterSize(size_t);
+        static size_t CalHashCount(size_t);
+    public:
+        BloomFilter(size_t key_count);
+        void Add(tablekey_t);
+        bfreq_t Estimate(tablekey_t);
         constexpr uint32_t hcount(){
             return hash_count;
         }
@@ -36,9 +36,18 @@ namespace BloomFilter
             }
             printf("\n");
         }
+        void setValue(uint32_t ind, bfreq_t val){
+            if(ind >= 0 && ind < table_size)
+                count_table[ind] = val;
+        }
+        bfreq_t getValue(uint32_t ind){
+            if(ind >= 0 && ind < table_size)
+                return count_table[ind];
+            throw std::out_of_range("Error! Index out of range");
+        }
     };
 
-    uint32_t HashMix(hashkey_t hkey, tabledata_t c){
+    uint32_t HashMix(hashkey_t hkey, tablekey_t c){
         /* 
         * Hash Function
         * Credits: adobe/chromium project
@@ -62,7 +71,7 @@ namespace BloomFilter
     }
 } // BloomFilter
 
-void BloomFilter::BloomFilter::Add(tabledata_t k){
+void BloomFilter::BloomFilter::Add(tablekey_t k){
     uint32_t index[hash_count], i;
     bfreq_t min_count; 
     for(i = 0; i < hash_count; i++)
@@ -75,7 +84,7 @@ void BloomFilter::BloomFilter::Add(tabledata_t k){
         ((count_table[index[i]]==min_count) && (count_table[index[i]]++));
 }   
 
-BloomFilter::bfreq_t BloomFilter::BloomFilter::Estimate(tabledata_t k){
+BloomFilter::bfreq_t BloomFilter::BloomFilter::Estimate(tablekey_t k){
     bfreq_t min_count, c;
     uint32_t i;
     min_count = count_table[HashMix(hkeys[0], k)];
@@ -87,18 +96,18 @@ BloomFilter::bfreq_t BloomFilter::BloomFilter::Estimate(tabledata_t k){
     return min_count;
 }
 
-uint32_t BloomFilter::BloomFilter::CalFilterSize(unsigned int key_count){
-    unsigned int default_min = BloomFilter::BloomFilterMinSize;
-    unsigned int number_of_keys = std::max(key_count, default_min);
+size_t BloomFilter::BloomFilter::CalFilterSize(size_t key_count){
+    size_t default_min = BloomFilter::BloomFilterMinSize;
+    size_t number_of_keys = std::max(key_count, default_min);
     return static_cast<uint32_t>(std::min(number_of_keys * BloomFilter::BloomFilterSizeRatio
                                 , BloomFilter::BloomFilterMaxSize * 8));
 }
 
-uint32_t BloomFilter::BloomFilter::CalHashCount(unsigned int key_count){
+size_t BloomFilter::BloomFilter::CalHashCount(size_t key_count){
     return static_cast<uint32_t>(0.693*CalFilterSize(key_count)/key_count);
 }
 
-BloomFilter::BloomFilter::BloomFilter(int key_count): table_size(CalFilterSize(key_count)) 
+BloomFilter::BloomFilter::BloomFilter(size_t key_count): table_size(CalFilterSize(key_count)) 
                                                     , hash_count(CalHashCount(key_count)){
     printf("tsize: %u, hsize: %u\n", table_size, hash_count);
     uint32_t i;
