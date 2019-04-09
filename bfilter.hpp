@@ -1,11 +1,13 @@
 #ifndef BFILTER_HPP_
 #define BFILTER_HPP_
 #include<bits/stdc++.h>
+
 namespace BloomFilter {
     typedef uint32_t tablekey_t;
     typedef uint64_t hashkey_t;
     typedef std::vector<hashkey_t> hashkeys_t;
     typedef uint8_t bfreq_t;
+
     class BloomFilter{
     private:
         const uint32_t hash_count;
@@ -21,6 +23,7 @@ namespace BloomFilter {
         BloomFilter(size_t key_count);
         void Add(tablekey_t);
         bfreq_t Estimate(tablekey_t);
+        
         constexpr uint32_t hcount(){
             return hash_count;
         }
