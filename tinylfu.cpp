@@ -1,18 +1,16 @@
 #include <stdexcept>
 #include "bfilter.hpp"
 #include "cache.hpp"
-#include "lfu.hpp"
-
-typedef uint32_t cacheobj_t;
 
 class TinyLFU {
 private:
-    uint32_t steps, size;
+    uint32_t steps;
+    size_t size;
     CachePolicy *cache_policy;
-    BloomFilter::BloomFilter * histogram;
+    BloomFilter::BloomFilter *histogram;
 
 public:
-    TinyLFU(uint32_t size=1e3, CachePolicy * policy=NULL, uint32_t steps=10) {
+    TinyLFU(size_t size=1e3, CachePolicy *policy=NULL, uint32_t steps=10) {
         if (policy == NULL) {
             throw std::invalid_argument("No Cache policy Supplied");
         }   
@@ -42,10 +40,3 @@ public:
     }
 }; 
 
-int main() {
-    CachePolicy * policy = new LFU(1e3);
-    TinyLFU *tf = new TinyLFU(1e3, policy);
-    for(cacheobj_t i = 1e3; i <= 1e3+300; i++)
-        tf->add(i);
-    return 0;
-}
