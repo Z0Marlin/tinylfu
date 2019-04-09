@@ -1,14 +1,14 @@
 #include <stdexcept>
 #include"bfilter.hpp"
+#include "cache.hpp"
 #include "lfu.hpp"
-#include "lru.hpp"
 
 typedef uint32_t cacheobj_t;
 
 class TinyLFU {
 private:
     uint32_t steps, size;
-    Cache * cache_policy;
+    CachePolicy *cache_policy;
     BloomFilter::BloomFilter * histogram;
 
 public:
@@ -40,7 +40,7 @@ public:
             }               
         }
     }
-} ;  
+}; 
 
 int main() {
     Cache * policy = new LFU(1e3);
