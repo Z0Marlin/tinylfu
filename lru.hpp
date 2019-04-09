@@ -17,77 +17,76 @@ class LRU: public Cache {
     unordered_map<cacheobj_t, list<cacheobj_t>::iterator> ma; 
 
 public:
-    LRUCache(int);
+    LRU(int);
     void display();
 }; 
 
-LRUCache::LRUCache(int n) 
+LRU::LRU(int n) 
 { 
-	LRUCache::cache_size = n; 
+	LRU::cache_size = n; 
 } 
 
-
-bool LRUCache::is_full(){
-	return (LRUCache::cache_list.size() == LRUCache::cache_size);
+bool LRU::is_full(){
+	return (LRU::cache_list.size() == LRU::cache_size);
 } 
 
-bool LRUCache::has_obj(cacheobj_t x){
-    return !(LRUCache::ma.find(x) == LRUCache::ma.end());
+bool LRU::has_obj(cacheobj_t x){
+    return !(LRU::ma.find(x) == LRU::ma.end());
 }
 
-bool LRUCache::is_empty(){
-    return LRUCache::cache_list.empty();
+bool LRU::is_empty(){
+    return LRU::cache_list.empty();
 } 
 
-void LRUCache::add(cacheobj_t x){
+void LRU::add(cacheobj_t x){
     //not present in Cache
-	if (!LRUCache::has_obj(x)) 
+	if (!LRU::has_obj(x)) 
 	{ 
-		if (LRUCache::is_full()) 
+		if (LRU::is_full()) 
 		{ 
         	//delete least recently used element 
-			cacheobj_t last=LRUCache::evict();
+			cacheobj_t last=LRU::evict();
 		} 
 	} 
 	// present in cache 
 	else
-		LRUCache::cache_list.erase(LRUCache::ma[x]); 
+		LRU::cache_list.erase(LRU::ma[x]); 
 
 	// update reference of key 
-	LRUCache::cache_list.push_front(x); 
-	LRUCache::ma[x] = LRUCache::cache_list.begin(); 
+	LRU::cache_list.push_front(x); 
+	LRU::ma[x] = LRU::cache_list.begin(); 
 }
 
 
-cacheobj_t LRUCache::next_victim(){
-    	return LRUCache::cache_list.back();
+cacheobj_t LRU::next_victim(){
+    	return LRU::cache_list.back();
 }
 
-cacheobj_t LRUCache::evict(){
-    	cacheobj_t last = LRUCache::next_victim(); 
-		LRUCache::cache_list.pop_back(); 
-	    LRUCache::ma.erase(last); 
+cacheobj_t LRU::evict(){
+    	cacheobj_t last = LRU::next_victim(); 
+		LRU::cache_list.pop_back(); 
+	    LRU::ma.erase(last); 
 		return last;
 } 
 
-void LRUCache::display() 
+void LRU::display() 
 { 
-    for (auto it = LRUCache::cache_list.begin(); it != LRUCache::cache_list.end();it++) 
+    for (auto it = LRU::cache_list.begin(); it != LRU::cache_list.end();it++) 
         cout << (*it) << " "; 
     cout << endl; 
 } 
 
-// Driver program to test above functions 
-int main() 
-{ 
-	LRUCache ca(4); 
-	ca.add(1); 
-	ca.add(2); 
-	ca.add(3); 
-	ca.add(1); 
-	ca.add(4); 
-	ca.add(5); 
-	ca.display(); 
+// // Driver program to test above functions 
+// int main() 
+// { 
+// 	LRU ca(4); 
+// 	ca.add(1); 
+// 	ca.add(2); 
+// 	ca.add(3); 
+// 	ca.add(1); 
+// 	ca.add(4); 
+// 	ca.add(5); 
+// 	ca.display(); 
 
-	return 0; 
-}
+// 	return 0; 
+// }

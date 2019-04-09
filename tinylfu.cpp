@@ -40,10 +40,11 @@ public:
             }               
         }
     }
-}   
+} ;  
 
 int main() {
-    TinyLFU *tf = new TinyLFU(1e3, new LFU(1e3));
+    Cache * policy = new LFU(1e3);
+    TinyLFU *tf = new TinyLFU(1e3, policy);
     for(cacheobj_t i = 1e3; i <= 1e3+300; i++)
         tf->add(i);
     return 0;
