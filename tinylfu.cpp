@@ -1,5 +1,5 @@
 #include <stdexcept>
-#include"bfilter.hpp"
+#include "bfilter.hpp"
 #include "cache.hpp"
 #include "lfu.hpp"
 
@@ -12,7 +12,7 @@ private:
     BloomFilter::BloomFilter * histogram;
 
 public:
-    TinyLFU(uint32_t size=1e3, Cache * policy=NULL, uint32_t steps=10) {
+    TinyLFU(uint32_t size=1e3, CachePolicy * policy=NULL, uint32_t steps=10) {
         if (policy == NULL) {
             throw std::invalid_argument("No Cache policy Supplied");
         }   
@@ -43,7 +43,7 @@ public:
 }; 
 
 int main() {
-    Cache * policy = new LFU(1e3);
+    CachePolicy * policy = new LFU(1e3);
     TinyLFU *tf = new TinyLFU(1e3, policy);
     for(cacheobj_t i = 1e3; i <= 1e3+300; i++)
         tf->add(i);
