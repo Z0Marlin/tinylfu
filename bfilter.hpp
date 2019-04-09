@@ -109,7 +109,6 @@ size_t BloomFilter::BloomFilter::CalHashCount(size_t key_count){
 
 BloomFilter::BloomFilter::BloomFilter(size_t key_count): table_size(CalFilterSize(key_count)) 
                                                     , hash_count(CalHashCount(key_count)){
-    printf("tsize: %u, hsize: %u\n", table_size, hash_count);
     uint32_t i;
     std::random_device rd;
     std::mt19937_64 gen(rd());

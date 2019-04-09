@@ -118,12 +118,19 @@ cacheobj_t LFU::get(cacheobj_t key) {
 }
 
 cacheobj_t LFU::evict() {
-  if(cache.size() == capacity){
-        uint32_t evictedKey = fList[_minFrequent].front();
+    if(cache.size() == capacity){
+        cacheobj_t evictedKey = fList[_minFrequent].front();
         fList[_minFrequent].pop_front();
         kIterTable.erase(evictedKey);
         cache.erase(evictedKey);
+        return evictedKey;
     }
+    else
+    {
+        throw std::underflow_error("Error! Cannot evict. Cache not full");
+    }
+    
+
     
 }   
 
